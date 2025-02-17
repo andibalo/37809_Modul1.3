@@ -5,18 +5,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
+//@Composable
+//fun StatefulCounter(modifier: Modifier = Modifier) {
+//    var count by rememberSaveable { mutableStateOf(0) }
+//    StatelessCounter(count, { count++ }, modifier)
+//}
+//
+
+// ViewModel & StateFlow
 @Composable
 fun StatefulCounter(modifier: Modifier = Modifier) {
-    var count by rememberSaveable { mutableStateOf(0) }
-    StatelessCounter(count, { count++ }, modifier)
+    val counterViewModel: CounterViewModel = viewModel()
+
+    val count by counterViewModel.count.collectAsState()
+
+    StatelessCounter(count, { counterViewModel.increment() }, modifier)
 }
+
 
 @Composable
 fun StatelessCounter(count: Int, onIncrement: () -> Unit, modifier: Modifier = Modifier) {
